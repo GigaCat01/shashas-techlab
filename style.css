@@ -1,0 +1,249 @@
+:root {
+    --bg-color: #0a0a0c;
+    --surface-color: #16161a;
+    --accent-color: #00d2ff;
+    --accent-glow: rgba(0, 210, 255, 0.4);
+    --text-primary: #f0f0f5;
+    --text-secondary: #a0a0b0;
+    --border-color: #2a2a30;
+    --font-main: 'Inter', -apple-system, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Hero Section */
+.hero {
+    height: 70vh;
+    min-height: 500px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: url('hero-bg.png'); /* We will rename the generated image to this */
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(10, 10, 12, 0.4) 0%, rgba(10, 10, 12, 0.95) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.logo-text {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.logo-text span {
+    color: var(--accent-color);
+    text-shadow: 0 0 20px var(--accent-glow);
+}
+
+.tagline {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    font-weight: 300;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn.primary {
+    background-color: var(--accent-color);
+    color: #000;
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--accent-glow);
+    filter: brightness(1.1);
+}
+
+/* Section Styling */
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-align: center;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background-color: var(--accent-color);
+}
+
+.apps-section {
+    padding: 6rem 0;
+}
+
+/* App Cards */
+.app-card-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.app-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 3rem;
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.app-card:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-5px);
+}
+
+.app-icon-wrapper {
+    flex-shrink: 0;
+}
+
+.app-details h3 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.app-details p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.app-status {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background-color: rgba(0, 210, 255, 0.1);
+    color: var(--accent-color);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.badge-placeholder {
+    color: #555;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* About Section */
+.about-section {
+    padding: 6rem 0;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+.about-section p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+}
+
+/* Footer */
+.site-footer {
+    background-color: #050507;
+    padding: 4rem 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.footer-left p {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.footer-nav a:hover {
+    color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+    .app-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+    }
+    .logo-text {
+        font-size: 2.5rem;
+    }
+    .footer-content {
+        justify-content: center;
+        text-align: center;
+    }
+}
