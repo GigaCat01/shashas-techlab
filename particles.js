@@ -100,8 +100,8 @@ class Particle {
                 this.vy += dy / 800 * force;
                 this.opacity = Math.min(1, this.baseOpacity + force * 0.5);
                 
-                // Add heat to system
-                systemHeat += force * 0.5;
+                // Add heat to system (Slower fill)
+                systemHeat += force * 0.2;
             } else {
                 this.opacity = this.baseOpacity;
             }
@@ -132,20 +132,29 @@ window.addEventListener('mousemove', (e) => {
 
 function triggerExplosion() {
     isExploding = true;
-    explosionX = width / 2;
-    explosionY = height / 2;
+    const rect = energyContainerEl.getBoundingClientRect();
+    explosionX = rect.left + rect.width / 2;
+    explosionY = rect.top + rect.height / 2;
     explosionRadius = 0;
     
     // Reset heat after a delay
     setTimeout(() => {
         isExploding = false;
         systemHeat = 0;
-    }, 1000);
+    }, 1200);
 }
 
 function updateUI() {
-    // Heat decay
-    if (systemHeat > 0) systemHeat -= 0.15;
+    // Calculate total system movement
+    let totalVel = 0;
+    particles.forEach(p => {
+        totalVel += Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+    });
+    const avgVel = totalVel / particles.length;
+
+    // Heat decay: slower if particles are moving fast
+    const decayFactor = 0.25 * (1 - Math.min(1, avgVel / 1.5));
+    if (systemHeat > 0) systemHeat -= decayFactor;
     if (systemHeat < 0) systemHeat = 0;
     
     const displayHeat = Math.min(100, systemHeat);
