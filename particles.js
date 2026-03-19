@@ -11,7 +11,7 @@ const MOUSE_DIST = 200;
 
 // Minigame State
 let systemHeat = 0;
-const EXPLOSION_THRESHOLD = 100;
+const EXPLOSION_THRESHOLD = 400; // Much higher requirement
 let isExploding = false;
 let explosionRadius = 0;
 let explosionX = 0;
@@ -84,9 +84,9 @@ class Particle {
             this.vy = (this.vy / currentVel) * maxVel;
         }
 
-        // Friction (Velocity decay)
-        this.vx *= 0.98;
-        this.vy *= 0.98;
+        // NO Friction (Perpetual motion)
+        // this.vx *= 0.98;
+        // this.vy *= 0.98;
 
         // Constant slight movement (only if not exploding)
         if (!isExploding) {
