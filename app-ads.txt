@@ -1,5 +1,1 @@
-# Shasha's Techlab - AdMob Authorized Digital Sellers
-# Replace the line below with the one from your AdMob dashboard
-# Dashboard > View all apps > App-ads.txt > How to set up
-
 google.com, pub-2582503613530450, DIRECT, f08c47fec0942fa0
