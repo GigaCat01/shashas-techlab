@@ -76,17 +76,29 @@ class Particle {
         this.x += this.vx;
         this.y += this.vy;
 
+        // Velocity Cap (Prevent vanishing)
+        const maxVel = isExploding ? 20 : 5;
+        const currentVel = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        if (currentVel > maxVel) {
+            this.vx = (this.vx / currentVel) * maxVel;
+            this.vy = (this.vy / currentVel) * maxVel;
+        }
+
         // Friction (Velocity decay)
         this.vx *= 0.98;
         this.vy *= 0.98;
 
-        // Constant slight movement
-        this.vx += (Math.random() - 0.5) * 0.05;
-        this.vy += (Math.random() - 0.5) * 0.05;
+        // Constant slight movement (only if not exploding)
+        if (!isExploding) {
+            this.vx += (Math.random() - 0.5) * 0.05;
+            this.vy += (Math.random() - 0.5) * 0.05;
+        }
 
-        // Bounce off edges
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
+        // Bounce off edges + Clamp (Prevent vanishing)
+        if (this.x < 0) { this.x = 0; this.vx *= -1; }
+        if (this.x > width) { this.x = width; this.vx *= -1; }
+        if (this.y < 0) { this.y = 0; this.vy *= -1; }
+        if (this.y > height) { this.y = height; this.vy *= -1; }
 
         // Mouse Interaction
         if (mouseX && mouseY) {
@@ -100,8 +112,8 @@ class Particle {
                 this.vy += dy / 800 * force;
                 this.opacity = Math.min(1, this.baseOpacity + force * 0.5);
                 
-                // Add heat to system (Slower fill)
-                systemHeat += force * 0.2;
+                // Add heat to system (Extremely slow fill)
+                systemHeat += force * 0.02;
             } else {
                 this.opacity = this.baseOpacity;
             }

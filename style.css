@@ -278,6 +278,8 @@ body {
     color: var(--accent-color);
     margin-bottom: 10px;
     font-family: monospace;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: color 0.3s ease;
 }
 
 .energy-bar-bg {
@@ -299,8 +301,8 @@ body {
 /* Energy States */
 .energy-warning .energy-value,
 .energy-warning .energy-bar-fill {
-    color: #ff9800;
-    background: #ff9800;
+    color: #ff9800 !important;
+    background: #ff9800 !important;
     box-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
 }
 
