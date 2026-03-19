@@ -6,8 +6,19 @@ const CONNECTION_DIST = 150;
 const MOUSE_DIST = 200;
 
 function init() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    
+    // Set display size
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    
+    // Set internal resolution
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+    
     particles = [];
     for (let i = 0; i < PARTICLE_COUNT; i++) {
         particles.push(new Particle());
