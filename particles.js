@@ -160,12 +160,18 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('mousedown', (e) => {
-    clickShockwaves.push({
-        x: e.clientX,
-        y: e.clientY,
-        radius: 0,
-        opacity: 0.8
-    });
+    // Create water-droplet ripple effect (3 rings)
+    for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+            clickShockwaves.push({
+                x: e.clientX,
+                y: e.clientY,
+                radius: 0,
+                opacity: 0.8 - (i * 0.2),
+                speed: 8 - (i * 2)
+            });
+        }, i * 100);
+    }
 });
 
 function triggerExplosion() {
@@ -197,6 +203,19 @@ function updateUI() {
     energyValueEl.textContent = `${Math.floor(displayPercent)}%`;
     energyBarEl.style.width = `${displayPercent}%`;
     
+    // Dynamic Gradient Color (Blue -> Orange -> Red)
+    let hue;
+    if (displayPercent < 50) {
+        hue = 217 - (displayPercent / 50) * (217 - 35);
+    } else {
+        hue = 35 - ((displayPercent - 50) / 50) * 35;
+    }
+    const color = `hsl(${hue}, 90%, 60%)`;
+    energyBarEl.style.background = color;
+    energyBarEl.style.boxShadow = `0 0 15px ${color}`;
+    energyValueEl.style.color = color;
+    
+    // UI Classes
     energyContainerEl.classList.toggle('energy-warning', displayPercent > 50 && displayPercent < 85);
     energyContainerEl.classList.toggle('energy-critical', displayPercent >= 85);
     
@@ -261,14 +280,14 @@ function animate() {
         ctx.stroke();
     }
 
-    // Update and draw Click Shockwaves
+    // Update and draw Click Shockwaves (Water Droplet Style)
     clickShockwaves = clickShockwaves.filter(sw => {
-        sw.radius += 10;
-        sw.opacity -= 0.02;
+        sw.radius += sw.speed;
+        sw.opacity -= 0.015;
         if (sw.opacity <= 0 || sw.radius > SHOCKWAVE_MAX_RADIUS) return false;
         
         ctx.strokeStyle = `rgba(255, 255, 255, ${sw.opacity})`;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
         ctx.stroke();

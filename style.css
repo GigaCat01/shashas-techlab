@@ -301,8 +301,8 @@ body {
 /* Energy States */
 .energy-warning .energy-value,
 .energy-warning .energy-bar-fill {
-    color: #ff9800 !important;
-    background: #ff9800 !important;
+    color: #ff9800;
+    background: #ff9800;
     box-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
 }
 
