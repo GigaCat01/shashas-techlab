@@ -1,9 +1,21 @@
 const canvas = document.getElementById('antigravity-bg');
 const ctx = canvas.getContext('2d');
+const energyValueEl = document.getElementById('energy-value');
+const energyBarEl = document.getElementById('energy-bar');
+const energyContainerEl = document.getElementById('energy-container');
+
 let width, height, particles;
 const PARTICLE_COUNT = 150;
 const CONNECTION_DIST = 150;
 const MOUSE_DIST = 200;
+
+// Minigame State
+let systemHeat = 0;
+const EXPLOSION_THRESHOLD = 100;
+let isExploding = false;
+let explosionRadius = 0;
+let explosionX = 0;
+let explosionY = 0;
 
 function init() {
     const dpr = window.devicePixelRatio || 1;
@@ -45,11 +57,32 @@ class Particle {
             'rgba(15, 157, 88,'    // Green
         ];
         this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+        this.originalColorBase = this.colorBase;
     }
 
     update(mouseX, mouseY) {
+        if (isExploding) {
+            const dx = this.x - explosionX;
+            const dy = this.y - explosionY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < explosionRadius && dist > 0) {
+                const force = (explosionRadius - dist) / explosionRadius;
+                this.vx += (dx / dist) * force * 15;
+                this.vy += (dy / dist) * force * 15;
+                this.colorBase = 'rgba(255, 255, 255,'; // White hot during explosion
+            }
+        }
+
         this.x += this.vx;
         this.y += this.vy;
+
+        // Friction (Velocity decay)
+        this.vx *= 0.98;
+        this.vy *= 0.98;
+
+        // Constant slight movement
+        this.vx += (Math.random() - 0.5) * 0.05;
+        this.vy += (Math.random() - 0.5) * 0.05;
 
         // Bounce off edges
         if (this.x < 0 || this.x > width) this.vx *= -1;
@@ -62,20 +95,27 @@ class Particle {
             const dist = Math.sqrt(dx * dx + dy * dy);
             
             if (dist < MOUSE_DIST) {
-                // Gentle repulsion (Antigravity feel)
                 const force = (MOUSE_DIST - dist) / MOUSE_DIST;
-                this.vx += dx / 2000 * force;
-                this.vy += dy / 2000 * force;
+                this.vx += dx / 800 * force; // Stronger repulsion for minigame
+                this.vy += dy / 800 * force;
                 this.opacity = Math.min(1, this.baseOpacity + force * 0.5);
+                
+                // Add heat to system
+                systemHeat += force * 0.5;
             } else {
                 this.opacity = this.baseOpacity;
             }
+        }
+
+        // Return color to original if not exploding
+        if (!isExploding) {
+            this.colorBase = this.originalColorBase;
         }
     }
 
     draw() {
         ctx.fillStyle = `${this.colorBase}${this.opacity})`;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = systemHeat > 50 ? 15 : 8;
         ctx.shadowColor = `${this.colorBase}0.5)`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -90,6 +130,38 @@ window.addEventListener('mousemove', (e) => {
     mouseY = e.clientY;
 });
 
+function triggerExplosion() {
+    isExploding = true;
+    explosionX = width / 2;
+    explosionY = height / 2;
+    explosionRadius = 0;
+    
+    // Reset heat after a delay
+    setTimeout(() => {
+        isExploding = false;
+        systemHeat = 0;
+    }, 1000);
+}
+
+function updateUI() {
+    // Heat decay
+    if (systemHeat > 0) systemHeat -= 0.15;
+    if (systemHeat < 0) systemHeat = 0;
+    
+    const displayHeat = Math.min(100, systemHeat);
+    energyValueEl.textContent = `${Math.floor(displayHeat)}%`;
+    energyBarEl.style.width = `${displayHeat}%`;
+    
+    // UI Classes
+    energyContainerEl.classList.toggle('energy-warning', systemHeat > 50 && systemHeat < 85);
+    energyContainerEl.classList.toggle('energy-critical', systemHeat >= 85);
+    
+    // Trigger Explosion
+    if (systemHeat >= EXPLOSION_THRESHOLD && !isExploding) {
+        triggerExplosion();
+    }
+}
+
 function drawLines() {
     for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -101,7 +173,7 @@ function drawLines() {
 
             if (dist < CONNECTION_DIST) {
                 const opacity = (1 - dist / CONNECTION_DIST) * 0.3;
-                ctx.strokeStyle = `rgba(100, 100, 100, ${opacity})`;
+                ctx.strokeStyle = systemHeat > 85 ? `rgba(255, 61, 0, ${opacity})` : `rgba(100, 100, 100, ${opacity})`;
                 ctx.lineWidth = 0.8;
                 ctx.beginPath();
                 ctx.moveTo(p1.x, p1.y);
@@ -117,7 +189,7 @@ function drawLines() {
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < MOUSE_DIST) {
                 const opacity = (1 - dist / MOUSE_DIST) * 0.5;
-                ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                ctx.strokeStyle = systemHeat > 85 ? `rgba(255, 61, 0, ${opacity})` : `rgba(255, 255, 255, ${opacity})`;
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(mouseX, mouseY);
@@ -132,11 +204,23 @@ function animate() {
     ctx.fillStyle = '#0a0a0c'; // Solid dark bg
     ctx.fillRect(0,0, width, height);
     
+    if (isExploding) {
+        explosionRadius += 30;
+        // Draw shockwave ring
+        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - explosionRadius / 1500})`;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(explosionX, explosionY, explosionRadius, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+
     particles.forEach(p => {
         p.update(mouseX, mouseY);
         p.draw();
     });
+    
     drawLines();
+    updateUI();
     requestAnimationFrame(animate);
 }
 
