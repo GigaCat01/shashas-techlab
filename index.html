@@ -89,9 +89,16 @@
                 this.y = Math.random() * height;
                 this.vx = (Math.random() - 0.5) * 0.4;
                 this.vy = (Math.random() - 0.5) * 0.4;
-                this.size = Math.random() * 1.5 + 0.5;
-                this.baseOpacity = Math.random() * 0.4 + 0.1;
+                this.size = Math.random() * 2 + 1;
+                this.baseOpacity = Math.random() * 0.6 + 0.3;
                 this.opacity = this.baseOpacity;
+                const colors = [
+                    'rgba(66, 133, 244,',   // Blue
+                    'rgba(219, 68, 55,',   // Red
+                    'rgba(244, 180, 0,',   // Yellow
+                    'rgba(15, 157, 88,'    // Green
+                ];
+                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
             }
 
             update(mouseX, mouseY) {
@@ -121,9 +128,9 @@
             }
 
             draw() {
-                ctx.fillStyle = `rgba(0, 210, 255, ${this.opacity})`;
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = 'rgba(0, 210, 255, 0.5)';
+                ctx.fillStyle = `${this.colorBase}${this.opacity})`;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = `${this.colorBase}0.5)`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -147,9 +154,9 @@
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
                     if (dist < CONNECTION_DIST) {
-                        const opacity = (1 - dist / CONNECTION_DIST) * 0.15;
-                        ctx.strokeStyle = `rgba(0, 210, 255, ${opacity})`;
-                        ctx.lineWidth = 0.5;
+                        const opacity = (1 - dist / CONNECTION_DIST) * 0.3;
+                        ctx.strokeStyle = `rgba(100, 100, 100, ${opacity})`;
+                        ctx.lineWidth = 0.8;
                         ctx.beginPath();
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
@@ -163,8 +170,8 @@
                     const dy = particles[i].y - mouseY;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     if (dist < MOUSE_DIST) {
-                        const opacity = (1 - dist / MOUSE_DIST) * 0.3;
-                        ctx.strokeStyle = `rgba(0, 210, 255, ${opacity})`;
+                        const opacity = (1 - dist / MOUSE_DIST) * 0.5;
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(mouseX, mouseY);
