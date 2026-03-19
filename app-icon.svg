@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="128" height="128">
+    <defs>
+        <clipPath id="circleView">
+            <circle cx="54" cy="54" r="54" />
+        </clipPath>
+    </defs>
+    <!-- Background -->
+    <rect width="108" height="108" fill="#6750A4" clip-path="url(#circleView)" />
+    <circle cx="54" cy="54" r="50" fill="#7965AF" opacity="0.55" />
+
+    <!-- Foreground Icon -->
+    <!-- Bottom shadow -->
+    <path fill="#1A0A3D" opacity="0.10" d="M28,81 C33,84 54,85.5 54,85.5 C54,85.5 75,84 80,81 C75,83 64,85 54,85.5 C44,85 33,83 28,81 Z"/>
+
+    <!-- Left page block -->
+    <path fill="#EAE0FF" d="M54,21 C54,21 33,24 28,30 C23,36 23,78 28,81 C33,84 54,85.5 54,85.5 Z"/>
+    <!-- Left outer edge -->
+    <path fill="#C4B0F0" d="M28,30 C25,33 22,39 22,54 C22,69 25,75 28,81 L31,81 C28,75 25,69 25,54 C25,39 28,33 31,30 Z"/>
+    <!-- Left ruled lines -->
+    <g fill="none" stroke="#C4B0F0" stroke-linecap="round">
+        <path stroke-width="1.2" d="M33,40 L52,39.4"/>
+        <path stroke-width="1.0" d="M33,48 L52,47.4"/>
+        <path stroke-width="1.0" d="M33,56 L52,55.4"/>
+        <path stroke-width="1.0" d="M33,64 L52,63.4"/>
+        <path stroke-width="0.9" d="M33,72 L50,71.4"/>
+    </g>
+
+    <!-- Right page block -->
+    <path fill="#EAE0FF" d="M54,21 C54,21 75,24 80,30 C85,36 85,78 80,81 C75,84 54,85.5 54,85.5 Z"/>
+    <!-- Right outer edge -->
+    <path fill="#C4B0F0" d="M80,30 C83,33 86,39 86,54 C86,69 83,75 80,81 L77,81 C80,75 83,69 83,54 C83,39 80,33 77,30 Z"/>
+    <!-- Right ruled lines -->
+    <g fill="none" stroke="#C4B0F0" stroke-linecap="round">
+        <path stroke-width="1.2" d="M56,40 L75,39.4"/>
+        <path stroke-width="1.0" d="M56,48 L75,47.4"/>
+        <path stroke-width="1.0" d="M56,56 L75,55.4"/>
+        <path stroke-width="1.0" d="M56,64 L75,63.4"/>
+        <path stroke-width="0.9" d="M56,72 L72,71.4"/>
+    </g>
+
+    <!-- Spine -->
+    <path fill="#1A0A3D" d="M51.8,20 L56.2,20 L56.2,87 L51.8,87 Z"/>
+    <!-- Spine inner highlight -->
+    <path fill="#4A3A8A" opacity="0.5" d="M54,20 L55.2,20 L55.2,87 L54,87 Z"/>
+
+    <!-- Bookmark ribbon -->
+    <path fill="#D0BCFF" d="M52.2,15 L55.8,15 L55.8,26 L54,23.5 L52.2,26 Z"/>
+</svg>
