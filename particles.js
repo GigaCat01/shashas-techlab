@@ -11,7 +11,7 @@ const MOUSE_DIST = 200;
 
 // Minigame State
 let systemHeat = 0;
-const EXPLOSION_THRESHOLD = 400; // Much higher requirement
+const EXPLOSION_THRESHOLD = 1000; // Even higher requirement
 let isExploding = false;
 let explosionRadius = 0;
 let explosionX = 0;
@@ -113,7 +113,7 @@ class Particle {
                 this.opacity = Math.min(1, this.baseOpacity + force * 0.5);
                 
                 // Add heat to system (Extremely slow fill)
-                systemHeat += force * 0.02;
+                systemHeat += force * 0.01;
             } else {
                 this.opacity = this.baseOpacity;
             }
@@ -169,13 +169,13 @@ function updateUI() {
     if (systemHeat > 0) systemHeat -= decayFactor;
     if (systemHeat < 0) systemHeat = 0;
     
-    const displayHeat = Math.min(100, systemHeat);
-    energyValueEl.textContent = `${Math.floor(displayHeat)}%`;
-    energyBarEl.style.width = `${displayHeat}%`;
+    const displayPercent = Math.min(100, (systemHeat / EXPLOSION_THRESHOLD) * 100);
+    energyValueEl.textContent = `${Math.floor(displayPercent)}%`;
+    energyBarEl.style.width = `${displayPercent}%`;
     
     // UI Classes
-    energyContainerEl.classList.toggle('energy-warning', systemHeat > 50 && systemHeat < 85);
-    energyContainerEl.classList.toggle('energy-critical', systemHeat >= 85);
+    energyContainerEl.classList.toggle('energy-warning', displayPercent > 50 && displayPercent < 85);
+    energyContainerEl.classList.toggle('energy-critical', displayPercent >= 85);
     
     // Trigger Explosion
     if (systemHeat >= EXPLOSION_THRESHOLD && !isExploding) {
