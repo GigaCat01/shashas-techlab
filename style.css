@@ -32,30 +32,34 @@ body {
 /* Hero Section */
 .hero {
     height: 70vh;
-    min-height: 500px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-image: url('hero-bg.png'); /* We will rename the generated image to this */
-    background-size: cover;
-    background-position: center;
+    background-color: var(--bg-color);
     border-bottom: 1px solid var(--border-color);
+    overflow: hidden;
 }
 
-.hero-overlay {
+#antigravity-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(10, 10, 12, 0.4) 0%, rgba(10, 10, 12, 0.95) 100%);
+    z-index: 1;
 }
 
 .hero-content {
     position: relative;
     z-index: 2;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
 }
 
 .logo-text {
